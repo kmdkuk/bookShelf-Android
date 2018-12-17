@@ -25,3 +25,66 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+task hello << {
+    println 'Hello world!'
+}
+
+task hoge << {
+    String fuga = 'fuga'
+    int count = 9
+    println 'hoge' + fuga + 'piyo'
+        println count.toString()
+}
+
+task count << {
+    3.times {
+        println it
+    }
+}
+
+task unlockDoor << {
+    println "I unlock the door"
+}
+
+task enterMyRoom(dependsOn: unlockDoor) << {
+    println "I'm home"
+}
+
+task relax(dependsOn: enterMyRoom) << {
+    println "Relax..."
+}
+
+task enteryMyRoom2(dependsOn: 'unlockDoor2') << {
+    println "I'm home"
+}
+
+task unlockDoor2 << {
+    println "I unlock the door"
+}
+
+task unlockDoor3 << {
+    println "I unlock the door"
+}
+task enterMyRoom3 << {
+    println "I'm home"
+}
+task relax3 << {
+    println "Relax..."
+}
+
+enterMyRoom3.dependsOn unlockDoor3
+relax3.dependsOn unlockDoor3, enterMyRoom3
+
+task sample << {
+    println 'hoge'
+}
+sample.doFirst {
+    println 'hello!'
+}
+sample.doLast {
+    println 'fuga'
+}
+sample << {
+    println 'piyo'
+}
