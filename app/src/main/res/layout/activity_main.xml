@@ -21,6 +21,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:onClick="addBook"
         android:text="本の追加" />
+
+    <Button
+        android:id="@+id/resetBook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:onClick="deleteDB"
+        android:text="リセット" />
 
 </LinearLayout>

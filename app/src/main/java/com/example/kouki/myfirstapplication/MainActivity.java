@@ -16,13 +16,14 @@ public class MainActivity extends AppCompatActivity {
     private BookOpenHelper mBookOpenHelper;
     private Cursor mCursor;
     private SimpleCursorAdapter mSimpleCursorAdapter;
+    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView scrollView = (ListView) findViewById(R.id.listview);
+        mListView = (ListView) findViewById(R.id.listview);
 
         mBookOpenHelper = new BookOpenHelper(this);
 
@@ -30,11 +31,11 @@ public class MainActivity extends AppCompatActivity {
         mCursor = read(mBookOpenHelper);
         // UIにバインドするデータのカラム名
         String[] from = {
-                Book.COLUMN_NAME_BOOK_TITLE, Book.COLUMN_NAME_BOOK_PRICE
+                Book.COLUMN_NAME_BOOK_TITLE, Book.COLUMN_NAME_BOOK_PUBLISHER,Book.COLUMN_NAME_BOOK_PRICE
         };
         // 指定したカラムのデータを表示するViewのIDを指定します。
         int[] to = {
-                R.id.Title, R.id.Price
+                R.id.Title, R.id.Publisher, R.id.Price
 
         };
         // 第2引数 リストに表示するレイアウトファイル
@@ -45,27 +46,36 @@ public class MainActivity extends AppCompatActivity {
         // 第6引数 Adapterの振る舞いを指定します。
         mSimpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.book_list, mCursor, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 
-        scrollView.setAdapter(mSimpleCursorAdapter);
+        mListView.setAdapter(mSimpleCursorAdapter);
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        refleshList();
+    }
+
+    public void deleteDB(View view)
+    {
+        SQLiteDatabase db = mBookOpenHelper.getWritableDatabase();
+        mBookOpenHelper.resetDb(db);
+        refleshList();
     }
 
     public void addBook(View view) {
-        insert(mBookOpenHelper);
+        //insert(mBookOpenHelper);
         // データを再読み込みしてListの表示を最新のものにします
-        mSimpleCursorAdapter.getCursor().requery();
+        //mSimpleCursorAdapter.getCursor();
+        Intent intent = new Intent(this, AddBookActivity.class);
+        //遷移先の画面を起動
+        startActivity(intent);
     }
 
-    private void insert(BookOpenHelper bookOpenHelper) {
-
-        SQLiteDatabase db = bookOpenHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(Book.COLUMN_NAME_BOOK_TITLE, "TITLE1");
-        values.put(Book.COLUMN_NAME_BOOK_PUBLISHER, "PUBLISHER1");
-        values.put(Book.COLUMN_NAME_BOOK_PRICE, "PRICE1");
-
-        db.insert(Book.BOOK_TABLE_NAME, null, values);
+    private void refleshList()
+    {
+        mSimpleCursorAdapter.swapCursor(read(mBookOpenHelper));
     }
-
 
     private Cursor read(BookOpenHelper bookOpenHelper) {
 

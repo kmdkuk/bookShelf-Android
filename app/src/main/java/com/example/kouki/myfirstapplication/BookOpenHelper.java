@@ -38,4 +38,10 @@ public class BookOpenHelper extends SQLiteOpenHelper {
         db.execSQL(BOOK_TABLE_DELETE);
         onCreate(db);
     }
+
+    public void resetDb(SQLiteDatabase db)
+    {
+        db.execSQL(BOOK_TABLE_DELETE);
+        onCreate(db);
+    }
 }
