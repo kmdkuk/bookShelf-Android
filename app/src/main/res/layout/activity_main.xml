@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:onClick="addBook"
-        android:text="本の追加" />
+        android:text="@string/add_book_button" />
 
     <Button
         android:id="@+id/resetBook"
@@ -30,6 +30,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:onClick="deleteDB"
-        android:text="リセット" />
+        android:text="@string/reset_button" />
 
 </LinearLayout>
