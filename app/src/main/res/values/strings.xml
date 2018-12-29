@@ -2,4 +2,12 @@
     <string name="app_name">My First Application</string>
     <string name="edit_message">Enter a message</string>
     <string name="button_send">Send</string>
+    <string name="book_list_title">Title</string>
+    <string name="book_list_price">Price</string>
+    <string name="book_list_author">Author</string>
+    <string name="add_book_button">本の追加</string>
+    <string name="reset_button">リセット</string>
+    <string name="edit_title">Title</string>
+    <string name="edit_author">Author</string>
+    <string name="register_button">登録</string>
 </resources>
