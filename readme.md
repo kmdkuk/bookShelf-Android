@@ -37,6 +37,7 @@ Andoroidのアプリ開発練習用に本棚アプリを作成したい所存
 ## 参考サイト様
 
 [公式チュートリアル](https://developer.android.com/training/basics/firstapp/?hl=ja)  
+[mixiさんのチュートリアル](http://mixi-inc.github.io/AndroidTraining/)
 [GitHubのテンプレート](https://qiita.com/suzuki-hoge/items/3a568dff36fd981082ba)  
 開発の流れの参考に
 [その１](https://dev.classmethod.jp/project-management/remote-work-with-github/)
