@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import com.example.kouki.myfirstapplication.R
+import com.example.kouki.myfirstapplication.model.BookModel
+import kotlinx.android.synthetic.main.activity_book_description.*
 
 class BookDescriptionActivity : AppCompatActivity() {
 
@@ -13,13 +15,9 @@ class BookDescriptionActivity : AppCompatActivity() {
 
         val intent = intent
         // MainActivityからintentで受け取ったものを取り出す
-        val selectedText = intent.getStringArrayExtra("Text")
-
-        val titleText = findViewById<TextView>(R.id.descTitle)
-        val authorText = findViewById<TextView>(R.id.descAuthor)
-        val priceText = findViewById<TextView>(R.id.deskPrice)
-        titleText.text = selectedText[0]
-        authorText.text = selectedText[1]
-        priceText.text = selectedText[2]
+        val selectedBook = intent.getSerializableExtra("Book") as BookModel
+        descTitle.text = selectedBook.title
+        descAuthor.text = selectedBook.author
+        deskPrice.text = selectedBook.price
     }
 }

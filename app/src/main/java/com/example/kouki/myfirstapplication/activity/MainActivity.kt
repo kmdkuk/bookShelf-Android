@@ -4,34 +4,31 @@ import android.content.Intent
 import android.database.Cursor
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.CursorAdapter
-import android.widget.ListView
 import android.widget.SimpleCursorAdapter
 import com.example.kouki.myfirstapplication.database.BookContract
 import com.example.kouki.myfirstapplication.database.BookOpenHelper
 import com.example.kouki.myfirstapplication.R
+import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
 
     private var mBookOpenHelper: BookOpenHelper? = null
     private var mCursor: Cursor? = null
     private var mSimpleCursorAdapter: SimpleCursorAdapter? = null
-    private var mListView: ListView? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mListView = findViewById<View>(R.id.listview) as ListView
-
         mBookOpenHelper = BookOpenHelper(this)
 
         // データを取得
-        mCursor = read(mBookOpenHelper!!)
+        mCursor = mBookOpenHelper!!.readDb()
         // UIにバインドするデータのカラム名
-        val from = arrayOf(BookContract.COLUMN_NAME_BOOK_TITLE, BookContract.COLUMN_NAME_BOOK_PUBLISHER, BookContract.COLUMN_NAME_BOOK_PRICE)
+        val from = arrayOf(BookContract.COLUMN_NAME_BOOK_TITLE, BookContract.COLUMN_NAME_BOOK_AUTHOR, BookContract.COLUMN_NAME_BOOK_PRICE)
         // 指定したカラムのデータを表示するViewのIDを指定します。
         val to = intArrayOf(R.id.Title, R.id.Publisher, R.id.Price)
         // 第2引数 リストに表示するレイアウトファイル
@@ -42,20 +39,31 @@ class MainActivity : AppCompatActivity(){
         // 第6引数 Adapterの振る舞いを指定します。
         mSimpleCursorAdapter = SimpleCursorAdapter(this, R.layout.book_list, mCursor, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER)
 
-        mListView!!.adapter = mSimpleCursorAdapter
+        listview!!.adapter = mSimpleCursorAdapter
 
-        mListView!!.setOnItemClickListener {_, _, position, _ ->
+        listview!!.setOnItemClickListener { _, _, position, _ ->
             // リスト項目をタップしたときの処理
             val intent = Intent(this.applicationContext, BookDescriptionActivity::class.java)
             // clickされたpositionのtextとphotoのID
-            val c = read(mBookOpenHelper!!)
-            c.moveToPosition(position)
-            val selectedText = arrayOf(c.getString(1), c.getString(2), c.getString(3))
-            c.close()
+            val selectedBook = mBookOpenHelper!!.getBook(position)
             // インテントにセット
-            intent.putExtra("Text", selectedText)
+            intent.putExtra("Book", selectedBook)
             // Activity をスイッチする
             startActivity(intent)
+        }
+
+        addBook.setOnClickListener {
+            //insert(mBookOpenHelper);
+            // データを再読み込みしてListの表示を最新のものにします
+            //mSimpleCursorAdapter.getCursor();
+            val intent = Intent(this, AddBookActivity::class.java)
+            //遷移先の画面を起動
+            startActivity(intent)
+        }
+
+        resetBook.setOnClickListener {
+            mBookOpenHelper!!.resetDb()
+            refleshList()
         }
     }
 
@@ -64,34 +72,7 @@ class MainActivity : AppCompatActivity(){
         refleshList()
     }
 
-    fun deleteDB() {
-        val db = mBookOpenHelper!!.writableDatabase
-        mBookOpenHelper!!.resetDb(db)
-        refleshList()
-    }
-
-    fun addBook() {
-        //insert(mBookOpenHelper);
-        // データを再読み込みしてListの表示を最新のものにします
-        //mSimpleCursorAdapter.getCursor();
-        val intent = Intent(this, AddBookActivity::class.java)
-        //遷移先の画面を起動
-        startActivity(intent)
-    }
-
     private fun refleshList() {
-        mSimpleCursorAdapter!!.swapCursor(read(mBookOpenHelper!!))
-    }
-
-    private fun read(bookOpenHelper: BookOpenHelper): Cursor {
-
-        val db = bookOpenHelper.readableDatabase
-
-        val projection = arrayOf(BookContract._ID, BookContract.COLUMN_NAME_BOOK_TITLE, BookContract.COLUMN_NAME_BOOK_PUBLISHER, BookContract.COLUMN_NAME_BOOK_PRICE)
-
-        val selection = BookContract.COLUMN_NAME_BOOK_PRICE + " = ?"
-        val selectionArgs = arrayOf("PRICE1")
-
-        return db.query(BookContract.BOOK_TABLE_NAME, projection, selection, selectionArgs, null, null, null)
+        mSimpleCursorAdapter!!.swapCursor(mBookOpenHelper!!.readDb())
     }
 }

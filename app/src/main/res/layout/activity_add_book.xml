@@ -39,7 +39,6 @@
         android:layout_width="379dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:onClick="registBook"
         android:text="@string/register_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -8,7 +8,7 @@ class BookContract : BaseColumns {
 
         const val _ID = "_id"
         const val COLUMN_NAME_BOOK_TITLE = "title"
-        const val COLUMN_NAME_BOOK_PUBLISHER = "publisher"
+        const val COLUMN_NAME_BOOK_AUTHOR = "author"
         const val COLUMN_NAME_BOOK_PRICE = "price"
     }
 }
