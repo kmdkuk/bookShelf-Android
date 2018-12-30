@@ -10,8 +10,11 @@ import android.view.View
 import android.widget.CursorAdapter
 import android.widget.ListView
 import android.widget.SimpleCursorAdapter
+import android.widget.AdapterView
 
-class MainActivity : AppCompatActivity() {
+
+
+class MainActivity : AppCompatActivity(){
 
     private var mBookOpenHelper: BookOpenHelper? = null
     private var mCursor: Cursor? = null
@@ -41,6 +44,20 @@ class MainActivity : AppCompatActivity() {
         mSimpleCursorAdapter = SimpleCursorAdapter(this, R.layout.book_list, mCursor, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER)
 
         mListView!!.adapter = mSimpleCursorAdapter
+
+        mListView!!.setOnItemClickListener {parent, view, position, id ->
+            // リスト項目をタップしたときの処理
+            val intent = Intent(this.applicationContext, BookDescriptionActivity::class.java)
+            // clickされたpositionのtextとphotoのID
+            val c = read(mBookOpenHelper!!)
+            c.moveToPosition(position)
+            val selectedText = arrayOf(c.getString(1), c.getString(2), c.getString(3))
+            c.close()
+            // インテントにセット
+            intent.putExtra("Text", selectedText)
+            // Activity をスイッチする
+            startActivity(intent)
+        }
     }
 
     override fun onStart() {
