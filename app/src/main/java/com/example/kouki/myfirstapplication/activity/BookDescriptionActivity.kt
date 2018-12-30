@@ -1,9 +1,9 @@
-package com.example.kouki.myfirstapplication
+package com.example.kouki.myfirstapplication.activity
 
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import com.example.kouki.myfirstapplication.R
 
 class BookDescriptionActivity : AppCompatActivity() {
 

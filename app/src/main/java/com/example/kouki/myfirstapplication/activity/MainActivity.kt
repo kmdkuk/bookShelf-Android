@@ -1,17 +1,16 @@
-package com.example.kouki.myfirstapplication
+package com.example.kouki.myfirstapplication.activity
 
-import android.content.ContentValues
 import android.content.Intent
 import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.CursorAdapter
 import android.widget.ListView
 import android.widget.SimpleCursorAdapter
-import android.widget.AdapterView
-
+import com.example.kouki.myfirstapplication.database.BookContract
+import com.example.kouki.myfirstapplication.database.BookOpenHelper
+import com.example.kouki.myfirstapplication.R
 
 
 class MainActivity : AppCompatActivity(){
@@ -32,7 +31,7 @@ class MainActivity : AppCompatActivity(){
         // データを取得
         mCursor = read(mBookOpenHelper!!)
         // UIにバインドするデータのカラム名
-        val from = arrayOf(Book.COLUMN_NAME_BOOK_TITLE, Book.COLUMN_NAME_BOOK_PUBLISHER, Book.COLUMN_NAME_BOOK_PRICE)
+        val from = arrayOf(BookContract.COLUMN_NAME_BOOK_TITLE, BookContract.COLUMN_NAME_BOOK_PUBLISHER, BookContract.COLUMN_NAME_BOOK_PRICE)
         // 指定したカラムのデータを表示するViewのIDを指定します。
         val to = intArrayOf(R.id.Title, R.id.Publisher, R.id.Price)
         // 第2引数 リストに表示するレイアウトファイル
@@ -45,7 +44,7 @@ class MainActivity : AppCompatActivity(){
 
         mListView!!.adapter = mSimpleCursorAdapter
 
-        mListView!!.setOnItemClickListener {parent, view, position, id ->
+        mListView!!.setOnItemClickListener {_, _, position, _ ->
             // リスト項目をタップしたときの処理
             val intent = Intent(this.applicationContext, BookDescriptionActivity::class.java)
             // clickされたpositionのtextとphotoのID
@@ -65,13 +64,13 @@ class MainActivity : AppCompatActivity(){
         refleshList()
     }
 
-    fun deleteDB(view: View) {
+    fun deleteDB() {
         val db = mBookOpenHelper!!.writableDatabase
         mBookOpenHelper!!.resetDb(db)
         refleshList()
     }
 
-    fun addBook(view: View) {
+    fun addBook() {
         //insert(mBookOpenHelper);
         // データを再読み込みしてListの表示を最新のものにします
         //mSimpleCursorAdapter.getCursor();
@@ -88,11 +87,11 @@ class MainActivity : AppCompatActivity(){
 
         val db = bookOpenHelper.readableDatabase
 
-        val projection = arrayOf(Book._ID, Book.COLUMN_NAME_BOOK_TITLE, Book.COLUMN_NAME_BOOK_PUBLISHER, Book.COLUMN_NAME_BOOK_PRICE)
+        val projection = arrayOf(BookContract._ID, BookContract.COLUMN_NAME_BOOK_TITLE, BookContract.COLUMN_NAME_BOOK_PUBLISHER, BookContract.COLUMN_NAME_BOOK_PRICE)
 
-        val selection = Book.COLUMN_NAME_BOOK_PRICE + " = ?"
+        val selection = BookContract.COLUMN_NAME_BOOK_PRICE + " = ?"
         val selectionArgs = arrayOf("PRICE1")
 
-        return db.query(Book.BOOK_TABLE_NAME, projection, selection, selectionArgs, null, null, null)
+        return db.query(BookContract.BOOK_TABLE_NAME, projection, selection, selectionArgs, null, null, null)
     }
 }
