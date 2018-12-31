@@ -7,28 +7,28 @@ import android.view.Menu
 import android.view.MenuItem
 import com.example.kouki.myfirstapplication.R
 import com.example.kouki.myfirstapplication.database.BookContract
+import com.example.kouki.myfirstapplication.database.BookOpenHelper
 import com.example.kouki.myfirstapplication.model.BookModel
 import kotlinx.android.synthetic.main.activity_book_description.*
 
 class BookDescriptionActivity : AppCompatActivity() {
 
+    private var mBookOpenHelper: BookOpenHelper? = null
     private var mSelectedBook: BookModel? = null
+    private var mSelectedId: Int? = null
+
+    companion object {
+        const val EXTRA_SELECTED_ID ="com.example.kouki.myfirstapplication.activity.book_description.SELECTED_ID"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_description)
 
+        mBookOpenHelper = BookOpenHelper(this)
+
         // MainActivityからintentで受け取ったものを取り出す
-        mSelectedBook = intent.getSerializableExtra("Book") as BookModel
-        titleTextView.text = mSelectedBook!!.title
-        authorsTextView.text = mSelectedBook!!.authors
-        descriptionTextView.text = mSelectedBook!!.description
-        publishedDateTextView.text = mSelectedBook!!.publishDate
-        categoriesTextView.text = mSelectedBook!!.categories
-        boughtDateTextView.text = mSelectedBook!!.boughtDate
-        readDateTextView.text = mSelectedBook!!.readDate
-        progressTextView.text = mSelectedBook!!.progress
-        notesTextView.text = mSelectedBook!!.notes
+        mSelectedId = intent.getIntExtra(EXTRA_SELECTED_ID, -1)
 
         val bookColumns = arrayListOf(
                 BookContract.COLUMN_NAME_BOOK_TITLE,
@@ -49,12 +49,31 @@ class BookDescriptionActivity : AppCompatActivity() {
                         // リスト項目をタップしたときの処理
                         val intent = Intent(this.applicationContext, EditBookActivity::class.java)
                         // インテントにセット
-                        intent.putExtra("SelectedColumns", bookColumns[index])
-                        intent.putExtra("Text", textView.text.toString())
+                        intent.putExtra(EditBookActivity.EXTRA_TARGET_ID, mSelectedBook!!.id)
+                        intent.putExtra(EditBookActivity.EXTRA_TARGET_COLUMN, bookColumns[index])
+                        intent.putExtra(EditBookActivity.EXTRA_TARGET_TEXT, textView.text.toString())
                         // Activity をスイッチする
                         startActivity(intent)
                     }
                 }
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mSelectedBook = mBookOpenHelper!!.getBook(mSelectedId!!)
+        setTexts()
+    }
+
+    fun setTexts(){
+        titleTextView.text = mSelectedBook!!.title
+        authorsTextView.text = mSelectedBook!!.authors
+        descriptionTextView.text = mSelectedBook!!.description
+        publishedDateTextView.text = mSelectedBook!!.publishDate
+        categoriesTextView.text = mSelectedBook!!.categories
+        boughtDateTextView.text = mSelectedBook!!.boughtDate
+        readDateTextView.text = mSelectedBook!!.readDate
+        progressTextView.text = mSelectedBook!!.progress
+        notesTextView.text = mSelectedBook!!.notes
     }
 }

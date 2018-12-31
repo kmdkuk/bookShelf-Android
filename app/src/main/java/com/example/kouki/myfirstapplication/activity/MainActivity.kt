@@ -4,6 +4,7 @@ import android.content.Intent
 import android.database.Cursor
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.CursorAdapter
 import android.widget.SimpleCursorAdapter
 import com.example.kouki.myfirstapplication.database.BookContract
@@ -17,6 +18,8 @@ class MainActivity : AppCompatActivity() {
     private var mBookOpenHelper: BookOpenHelper? = null
     private var mCursor: Cursor? = null
     private var mSimpleCursorAdapter: SimpleCursorAdapter? = null
+
+    private val TAG = MainActivity::class.java!!.getSimpleName();
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,12 +45,13 @@ class MainActivity : AppCompatActivity() {
         listView!!.adapter = mSimpleCursorAdapter
 
         listView!!.setOnItemClickListener { _, _, position, _ ->
+            Log.i(TAG, "$position")
             // リスト項目をタップしたときの処理
             val intent = Intent(this.applicationContext, BookDescriptionActivity::class.java)
             // clickされたpositionのtextとphotoのID
-            val selectedBook = mBookOpenHelper!!.getBook(position)
+            val selectedBook = mBookOpenHelper!!.getBook(position+1)
             // インテントにセット
-            intent.putExtra("Book", selectedBook)
+            intent.putExtra(BookDescriptionActivity.EXTRA_SELECTED_ID, selectedBook.id)
             // Activity をスイッチする
             startActivity(intent)
         }
