@@ -4,6 +4,12 @@ import java.io.Serializable
 
 data class BookModel(
         val title: String,
-        val author: String,
-        val price: String
+        val authors: String,
+        val description: String,
+        val publishDate: String,
+        val categories: String,
+        val boughtDate: String,
+        val readDate: String,
+        val progress: String,
+        val notes: String
 ) : Serializable

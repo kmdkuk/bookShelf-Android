@@ -24,7 +24,16 @@ class BookOpenHelper(context: Context)//DB-name,ver 指定
     fun getBook(index: Int): BookModel {
         var c = readDb()
         c.moveToPosition(index)
-        val selectedBook = BookModel(c.getString(1), c.getString(2), c.getString(3))
+        val selectedBook = BookModel(
+                c.getString(1),
+                c.getString(2),
+                c.getString(3),
+                c.getString(4),
+                c.getString(5),
+                c.getString(6),
+                c.getString(7),
+                c.getString(8),
+                c.getString(9))
         c.close()
 
         return selectedBook

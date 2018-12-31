@@ -8,7 +8,7 @@
     tools:context=".activity.MainActivity">
 
     <ListView
-        android:id="@+id/listview"
+        android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
@@ -17,14 +17,14 @@
 
     <!-- book追加ボタン -->
     <Button
-        android:id="@+id/addBook"
+        android:id="@+id/addButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:text="@string/add_book_button" />
 
     <Button
-        android:id="@+id/resetBook"
+        android:id="@+id/resetButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
