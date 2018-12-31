@@ -28,9 +28,9 @@ class MainActivity : AppCompatActivity() {
         // データを取得
         mCursor = mBookOpenHelper!!.readDb()
         // UIにバインドするデータのカラム名
-        val from = arrayOf(BookContract.COLUMN_NAME_BOOK_TITLE, BookContract.COLUMN_NAME_BOOK_AUTHOR, BookContract.COLUMN_NAME_BOOK_PRICE)
+        val from = arrayOf(BookContract.COLUMN_NAME_BOOK_TITLE, BookContract.COLUMN_NAME_BOOK_AUTHORS)
         // 指定したカラムのデータを表示するViewのIDを指定します。
-        val to = intArrayOf(R.id.Title, R.id.Publisher, R.id.Price)
+        val to = intArrayOf(R.id.Title, R.id.Publisher)
         // 第2引数 リストに表示するレイアウトファイル
         // 第3引数 データベースから取得してきたCursorを指定します
         // 第4引数 UIにバインドするデータのカラム名を指定します
