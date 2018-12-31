@@ -42,7 +42,7 @@ class BookOpenHelper(context: Context)//DB-name,ver 指定
 
         val values = ContentValues()
         values.put(BookContract.COLUMN_NAME_BOOK_TITLE, title)
-        values.put(BookContract.COLUMN_NAME_BOOK_AUTHOR, author)
+        values.put(BookContract.COLUMN_NAME_BOOK_AUTHORS, author)
         values.put(BookContract.COLUMN_NAME_BOOK_PRICE, "PRICE1")
 
         db.insert(BookContract.BOOK_TABLE_NAME, null, values)
@@ -68,15 +68,21 @@ class BookOpenHelper(context: Context)//DB-name,ver 指定
     companion object {
 
         // DB version
-        private const val DATABASE_VERSION = 5
+        private const val DATABASE_VERSION = 6
 
         private const val DATABASE_NAME = "main.db"
 
         private const val BOOK_TABLE_CREATE = "CREATE TABLE " + BookContract.BOOK_TABLE_NAME + " (" +
                 BookContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 BookContract.COLUMN_NAME_BOOK_TITLE + " TEXT NOT NULL, " +
-                BookContract.COLUMN_NAME_BOOK_AUTHOR + " TEXT, " +
-                BookContract.COLUMN_NAME_BOOK_PRICE + " TEXT);"
+                BookContract.COLUMN_NAME_BOOK_AUTHORS + " TEXT, " +
+                BookContract.COLUMN_NAME_BOOK_DESCRIPTION + " TEXT, " +
+                BookContract.COLUMN_NAME_BOOK_PUBLISHED_DATE + " TEXT, " +
+                BookContract.COLUMN_NAME_BOOK_CATEGORIES + " TEXT, " +
+                BookContract.COLUMN_NAME_BOOK_BOUGHT_DATE + " TEXT, " +
+                BookContract.COLUMN_NAME_BOOK_READ_DATE + " TEXT, " +
+                BookContract.COLUMN_NAME_BOOK_PROGRESS + " TEXT, " +
+                BookContract.COLUMN_NAME_BOOK_NOTES + " TEXT);"
         private const val BOOK_TABLE_DELETE = "DROP TABLE IF EXISTS " + BookContract.BOOK_TABLE_NAME
     }
 }
