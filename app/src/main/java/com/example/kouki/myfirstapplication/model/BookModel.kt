@@ -3,6 +3,7 @@ package com.example.kouki.myfirstapplication.model
 import java.io.Serializable
 
 data class BookModel(
+        val id: Int,
         val title: String,
         val authors: String,
         val description: String,
