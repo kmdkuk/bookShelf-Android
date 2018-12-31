@@ -21,7 +21,7 @@ class AddBookActivity : AppCompatActivity() {
         mBookOpenHelper = BookOpenHelper(this)
 
         registerButton.setOnClickListener {
-            mBookOpenHelper!!.insert(title_text.text.toString(), author_text.text.toString())
+            mBookOpenHelper!!.insert(titleEditText.text.toString(), authorsEditText.text.toString())
             finish()
         }
 

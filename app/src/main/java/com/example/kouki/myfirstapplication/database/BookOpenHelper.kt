@@ -22,16 +22,18 @@ class BookOpenHelper(context: Context)//DB-name,ver 指定
     }
 
     fun getBook(index: Int): BookModel {
-
-        val db = readableDatabase
-
-        val projection = arrayOf(BookContract._ID, BookContract.COLUMN_NAME_BOOK_TITLE, BookContract.COLUMN_NAME_BOOK_AUTHOR, BookContract.COLUMN_NAME_BOOK_PRICE)
-
-        val selection = BookContract.COLUMN_NAME_BOOK_PRICE + " = ?"
-        val selectionArgs = arrayOf("PRICE1")
-        var c = db.query(BookContract.BOOK_TABLE_NAME, projection, selection, selectionArgs, null, null, null) as Cursor
+        var c = readDb()
         c.moveToPosition(index)
-        val selectedBook = BookModel(c.getString(1), c.getString(2), c.getString(3))
+        val selectedBook = BookModel(
+                c.getString(1),
+                c.getString(2),
+                c.getString(3),
+                c.getString(4),
+                c.getString(5),
+                c.getString(6),
+                c.getString(7),
+                c.getString(8),
+                c.getString(9))
         c.close()
 
         return selectedBook
@@ -42,8 +44,14 @@ class BookOpenHelper(context: Context)//DB-name,ver 指定
 
         val values = ContentValues()
         values.put(BookContract.COLUMN_NAME_BOOK_TITLE, title)
-        values.put(BookContract.COLUMN_NAME_BOOK_AUTHOR, author)
-        values.put(BookContract.COLUMN_NAME_BOOK_PRICE, "PRICE1")
+        values.put(BookContract.COLUMN_NAME_BOOK_AUTHORS, author)
+        values.put(BookContract.COLUMN_NAME_BOOK_DESCRIPTION, "description")
+        values.put(BookContract.COLUMN_NAME_BOOK_PUBLISHED_DATE, "yyyy/mm/dd")
+        values.put(BookContract.COLUMN_NAME_BOOK_CATEGORIES, "category")
+        values.put(BookContract.COLUMN_NAME_BOOK_BOUGHT_DATE, "yyyy/mm/dd")
+        values.put(BookContract.COLUMN_NAME_BOOK_READ_DATE, "not complete")
+        values.put(BookContract.COLUMN_NAME_BOOK_PROGRESS, "0page")
+        values.put(BookContract.COLUMN_NAME_BOOK_NOTES, "")
 
         db.insert(BookContract.BOOK_TABLE_NAME, null, values)
     }
@@ -57,26 +65,40 @@ class BookOpenHelper(context: Context)//DB-name,ver 指定
     fun readDb(): Cursor {
         val db = readableDatabase
 
-        val projection = arrayOf(BookContract._ID, BookContract.COLUMN_NAME_BOOK_TITLE, BookContract.COLUMN_NAME_BOOK_AUTHOR, BookContract.COLUMN_NAME_BOOK_PRICE)
+        val projection = arrayOf(
+                BookContract._ID,
+                BookContract.COLUMN_NAME_BOOK_TITLE,
+                BookContract.COLUMN_NAME_BOOK_AUTHORS,
+                BookContract.COLUMN_NAME_BOOK_DESCRIPTION,
+                BookContract.COLUMN_NAME_BOOK_PUBLISHED_DATE,
+                BookContract.COLUMN_NAME_BOOK_CATEGORIES,
+                BookContract.COLUMN_NAME_BOOK_BOUGHT_DATE,
+                BookContract.COLUMN_NAME_BOOK_READ_DATE,
+                BookContract.COLUMN_NAME_BOOK_PROGRESS,
+                BookContract.COLUMN_NAME_BOOK_NOTES
+        )
 
-        val selection = BookContract.COLUMN_NAME_BOOK_PRICE + " = ?"
-        val selectionArgs = arrayOf("PRICE1")
-
-        return db.query(BookContract.BOOK_TABLE_NAME, projection, selection, selectionArgs, null, null, null)
+        return db.query(BookContract.BOOK_TABLE_NAME, projection, null, null, null, null, null)
     }
 
     companion object {
 
         // DB version
-        private const val DATABASE_VERSION = 5
+        private const val DATABASE_VERSION = 6
 
         private const val DATABASE_NAME = "main.db"
 
         private const val BOOK_TABLE_CREATE = "CREATE TABLE " + BookContract.BOOK_TABLE_NAME + " (" +
                 BookContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 BookContract.COLUMN_NAME_BOOK_TITLE + " TEXT NOT NULL, " +
-                BookContract.COLUMN_NAME_BOOK_AUTHOR + " TEXT, " +
-                BookContract.COLUMN_NAME_BOOK_PRICE + " TEXT);"
+                BookContract.COLUMN_NAME_BOOK_AUTHORS + " TEXT, " +
+                BookContract.COLUMN_NAME_BOOK_DESCRIPTION + " TEXT, " +
+                BookContract.COLUMN_NAME_BOOK_PUBLISHED_DATE + " TEXT, " +
+                BookContract.COLUMN_NAME_BOOK_CATEGORIES + " TEXT, " +
+                BookContract.COLUMN_NAME_BOOK_BOUGHT_DATE + " TEXT, " +
+                BookContract.COLUMN_NAME_BOOK_READ_DATE + " TEXT, " +
+                BookContract.COLUMN_NAME_BOOK_PROGRESS + " TEXT, " +
+                BookContract.COLUMN_NAME_BOOK_NOTES + " TEXT);"
         private const val BOOK_TABLE_DELETE = "DROP TABLE IF EXISTS " + BookContract.BOOK_TABLE_NAME
     }
 }
